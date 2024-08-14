@@ -1,0 +1,57 @@
+node_modules
+
+.env.*
+
+# Next.js build output
+.next
+out
+
+# Dependency directories
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Optional: Cache directories
+.npm
+.eslintcache
+.stylelintcache
+
+# Optional: Logs
+logs
+*.log
+
+# Optional: Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*.sublime-workspace
+
+# Optional: OS generated files
+.DS_Store
+.DS_Store?

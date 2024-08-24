@@ -1,29 +1,22 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Active, DataRef, Over } from '@dnd-kit/core';
-import { ColumnDragData } from '@/components/kanban/board-column';
-import { TaskDragData } from '@/components/kanban/task-card';
 
-type DraggableData = ColumnDragData | TaskDragData;
+export async function generateCards(deckName: string, description: string) {
+  const response = await fetch('/api/groq', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ deckName, description }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to generate cards');
+  }
+
+  const deck = await response.json();
+  console.log(deck);
+  return deck;
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function hasDraggableData<T extends Active | Over>(
-  entry: T | null | undefined
-): entry is T & {
-  data: DataRef<DraggableData>;
-} {
-  if (!entry) {
-    return false;
-  }
-
-  const data = entry.data.current;
-
-  if (data?.type === 'Column' || data?.type === 'Task') {
-    return true;
-  }
-
-  return false;
 }

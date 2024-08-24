@@ -1,6 +1,8 @@
 import { NextAuthConfig } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
+import { dbConnect } from '@/lib/db/dbConnect';
+import { User as UserModel } from '@/lib/db/models/User';
 
 const authConfig = {
   providers: [
@@ -24,7 +26,24 @@ const authConfig = {
           email: credentials?.email as string
         };
         if (user) {
-          // Any object returned will be saved in `user` property of the JWT
+          await dbConnect();
+
+          // Check if the user already exists in the database
+          const existingUser = await UserModel.findOne({ email: credentials?.email });
+          if (!existingUser) {
+            // If the user doesn't exist, create a new user document
+            const newUser = new UserModel({
+              name: user.name,
+              email: user.email,
+              isPro: false
+            });
+
+            // Save the new user to the database
+            await newUser.save();
+            console.log('New user created and saved to database');
+          } else {
+            console.log('User already exists in the database');
+          }
           return user;
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
